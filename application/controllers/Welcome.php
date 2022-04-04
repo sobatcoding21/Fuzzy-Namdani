@@ -8,7 +8,8 @@ class Welcome extends MY_Controller {
 	{
 		$config = [
 			'title' => 'Data Bencana Hidrometeorologi',
-			'subtitle' => 'Data Bencana Hidrometeorologi'
+			'subtitle' => 'Data Bencana Hidrometeorologi',
+			'content'   => $this->load->view('pages/dashboard', [], true)
 		];
 		$this->render($config);
 	}
