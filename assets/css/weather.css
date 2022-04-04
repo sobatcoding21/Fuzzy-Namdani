@@ -1,0 +1,88 @@
+.weather-wrapper {
+    padding: 15px;
+}
+.weather-header h3, .weather-body {
+    text-align: center;
+}
+.weather-body .temp {
+    font-size: 2rem;
+}
+.weather {
+    width: 152px;
+    height: 152px;
+    background-color: #cdcdcddd;
+    display: block;
+    margin: 15px auto;
+}
+.weather.w-clear {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 7%;
+    background-position-y: 4%;
+    background-repeat: no-repeat;
+}
+.weather.w-partly-cloudy {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 29%;
+    background-position-y: 4%;
+    background-repeat: no-repeat;
+}
+.weather.w-cloudly {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 4%;
+    background-repeat: no-repeat;
+}
+.weather.w-overcast {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 4%;
+    background-repeat: no-repeat;
+}
+.weather.w-haze {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 78%;
+    background-repeat: no-repeat;
+}
+.weather.w-smoke {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 59%;
+    background-repeat: no-repeat;
+}
+.weather.w-fog {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 59%;
+    background-repeat: no-repeat;
+}
+.weather.w-light-rain {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 50%;
+    background-position-y: 21%;
+    background-repeat: no-repeat;
+}
+.weather.w-rain {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 22%;
+    background-repeat: no-repeat;
+}
+.weather.w-heavy-rain {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 93%;
+    background-position-y: 22%;
+    background-repeat: no-repeat;
+}
+.weather.w-isolated-shower {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 28%;
+    background-position-y: 77%;
+    background-repeat: no-repeat;
+}
+.weather.w-thunderstorm {
+    background-image: url('../images/weather_icons.png');
+    background-position-x: 7%;
+    background-position-y: 40%;
+    background-repeat: no-repeat;
+}
