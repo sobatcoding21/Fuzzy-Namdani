@@ -49,6 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+$route['save-data-bencana'] = 'welcome/simpanBencana';
 $route['fuzzy-mamdani'] = 'fuzzyMamdani/index';
 $route['peta'] = 'peta/index';
 $route['peringatan-dini'] = 'peringatanDini/index';

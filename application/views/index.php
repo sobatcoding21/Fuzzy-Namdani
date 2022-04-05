@@ -19,6 +19,9 @@
                 min-height: 57px;
                 width: 220px;
             }
+            .mCSB_container {
+                width: 100% !important;
+            }
         </style>
     </head>
 
@@ -80,7 +83,10 @@
     </div>
     
     <?php $this->load->view('inc/js') ?>
-
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcwGyRxRbcNGWOFQVT87A1mkxEOfm8t0w&callback=initMap&v=weekly"
+      async
+    ></script>
 </body>
 
 </html>
