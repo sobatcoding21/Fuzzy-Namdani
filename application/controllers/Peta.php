@@ -11,12 +11,24 @@ class Peta extends MY_Controller {
     public function index()
     {
         
-        $config = [
-            'title'     => 'Peta | BPBD Kota Kediri',
-            'subtitle'  => 'Peta',
-            'content'   => $this->load->view('pages/peta', ['data' => $this->MBencana->getAll()], true)
-        ];
-        $this->render($config);
+        if( $this->input->get('q') )
+        {
+            $config = [
+                'title'     => 'Peta | BPBD Kota Kediri',
+                'subtitle'  => 'Peta',
+                'content'   => $this->load->view('pages/peta_detail', ['title' => ucfirst($this->input->get('q')) ], true),
+                'custom_js' => base_url('assets/js/customs/peta.js')
+            ];
+            $this->render($config);
+        }else{
+            $config = [
+                'title'     => 'Peta | BPBD Kota Kediri',
+                'subtitle'  => 'Peta',
+                'content'   => $this->load->view('pages/peta', ['data' => $this->MBencana->getAll()], true)
+            ];
+            $this->render($config);
+        }
+        
     }
 
 }

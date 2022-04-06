@@ -83,10 +83,15 @@
     </div>
     
     <?php $this->load->view('inc/js') ?>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcwGyRxRbcNGWOFQVT87A1mkxEOfm8t0w&callback=initMap&v=weekly"
-      async
-    ></script>
+    <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcwGyRxRbcNGWOFQVT87A1mkxEOfm8t0w&callback=initMap&v=weekly" async ></script-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL-IYNvaZVdwEmB0t5goQu17wO6frHuVE&callback=initMap&v=weekly" async ></script>
+    
+    <?php 
+        if($custom_js) { 
+            echo '<script src='.$custom_js.'></script>';
+        }
+    
+    ?>
 </body>
 
 </html>

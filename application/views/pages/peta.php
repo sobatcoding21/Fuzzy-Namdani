@@ -12,7 +12,7 @@
                     </div>
                         
                     <div class="card-footer text-center">
-                        <h6><?= $val->nama; ?></h6>
+                        <h6><a href="<?= base_url('peta?q='. $val->nama) ?>"><?= $val->nama; ?></a></h6>
                     </div>
                 </div>
             </div>
