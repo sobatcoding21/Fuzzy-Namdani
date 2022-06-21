@@ -12,10 +12,7 @@ class FuzzyMamdani extends MY_Controller {
     public function index()
     {
         $fuzzy = new Fuzzy;
-        $fuzzy->setItem('Produksi');
-        $fuzzy->setInput(['Permintaan', 'Persediaan']);
-        $fuzzy->setOutput(['Produksi']);
-        dd($fuzzy->output());
+        dd($fuzzy->output()['results']);
 
         $year = 2020;
         $config = [

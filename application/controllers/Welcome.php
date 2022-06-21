@@ -42,4 +42,48 @@ class Welcome extends MY_Controller {
 		
 	}
 
+
+	public function dummyDb()
+	{
+		$rows = $this->db->get('m_kelurahan')->result();
+		$bencana = $this->db->get('m_bencana')->result();
+		foreach($rows as $index=>$val)
+		{
+			if( !$exist = $this->db->get_where('pemetaan_bencana', ['year' => '2020', 'kelurahan_id' => $val->id_kelurahan])->row() )
+			{
+				$insert = [
+					'year' => '2020',
+					'kelurahan_id' => $val->id_kelurahan,
+					'created_at' => date("Y-m-d H:i:s")
+				];
+
+				$this->db->insert('pemetaan_bencana', $insert);
+				$id = $this->db->insert_id();
+			}else{
+				$id = $exist->id;
+			}
+
+			foreach($bencana as $k=>$b)
+			{
+				if( !$ex = $this->db->get_where('pemetaan_bencana_detail', ['pemetaan_id' => $id, 'bencana_id' => $b->id])->row() )
+				{
+					$insertDet = [
+						'pemetaan_id' => $id,
+						'bencana_id' => $b->id,
+						'bencana'	=> rand(0,10),
+						'populasi'	=> rand(1000,5000),
+						'bangunan'	=> rand(1000,5000),
+						'faskes'	=> rand(10,200),
+						'created_at' => date("Y-m-d H:i:s")
+					];
+					$this->db->insert('pemetaan_bencana_detail', $insertDet);
+				}
+			}
+
+			
+		}
+
+		
+	}
+
 }
