@@ -31,37 +31,47 @@
                 <?= $this->session->userdata('_message') ?>
             </div>
         <?php } ?>
-        <table class="table table-striped">
-            <thead class="bg-info">
-                <tr>
-                    <th rowspan="2">ID</th>
-                    <th rowspan="2">Tahun</th>
-                    <th rowspan="2">Kelurahan</th>
-                    <th colspan="5">Jumlah Bencana Hidrometeorologi</th>
-                </tr>
-                <tr>
-                    <th class="text-center">Tanah Longsor</th>
-                    <th class="text-center">Kekeringan</th>
-                    <th class="text-center">Banjir</th>
-                    <th class="text-center">Cuaca Ekstrim</th>
-                    <th class="text-center">Gempa Bumi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($data as $index=>$v) { ?>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="bg-info">
                     <tr>
-                        <td><?= $index+1 ?></td>
-                        <td><?= $v->year ?></td>
-                        <td><?= $v->nama ?></td>
-                        <td class="text-center"><?= $v->tanah_longsor ?></td>
-                        <td class="text-center"><?= $v->kekeringan ?></td>
-                        <td class="text-center"><?= $v->banjir ?></td>
-                        <td class="text-center"><?= $v->cuaca_ekstrim ?></td>
-                        <td class="text-center"><?= $v->gempa_bumi ?></td>
+                        <th rowspan="3" style="vertical-align: middle;">No</th>
+                        <th rowspan="3" style="vertical-align: middle;">Tahun</th>
+                        <th rowspan="3" style="vertical-align: middle;">Kelurahan</th>
+                        <th colspan="20" class="text-left">Jumlah Bencana Hidrometeorologi</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                    <tr>
+                        <?php foreach($jbencana as $b) { ?>
+                        <th class="text-center" colspan="4"><?= $b->nama ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <?php for($i=0;$i< count($jbencana);$i++) { ?>
+                        <?php foreach($variable as $k=>$v) { ?>
+                        <th class="text-center"><?= $v->name. '&nbsp;('.$v->code.')' ?></th>
+                        <?php } ?>
+                        <?php } ?>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($data as $index=>$v) { ?>
+                        <tr>
+                            <td><?= $index+1 ?></td>
+                            <td><?= $v->year ?></td>
+                            <td><?= $v->nama ?></td>
+                            <?php foreach($jbencana as $b) { ?>
+                                <?php foreach($variable as $k=>$var) { 
+                                    $code = $var->code;    
+                                ?>
+                                <td class="text-center"><?= $v->info[$b->nama]->$code ?></td>
+                                <?php } ?>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -103,6 +113,22 @@
                                     <option value="<?= $v->id ?>"><?= $v->nama ?></option>
                             <?php } ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Bencana (D)</label>
+                        <input class="form-control" name="bencana" value="0" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Populasi Terdampak (PD)</label>
+                        <input class="form-control" name="populasi" value="0" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Bangunan (NB)</label>
+                        <input class="form-control" name="bangunan" value="0" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah Faskes (FH)</label>
+                        <input class="form-control" name="faskes" value="0" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer">

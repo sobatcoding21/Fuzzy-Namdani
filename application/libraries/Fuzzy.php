@@ -64,7 +64,7 @@ class Fuzzy {
         return $range;
     }
 
-    public function output()
+    public function output($year)
     {
         $this->range = $this->setRange();
         $results['range'] = $this->range;
@@ -72,7 +72,7 @@ class Fuzzy {
         #wilayah
         $ci =& get_instance();
         $bencana = $ci->db->query('SELECT * FROM m_bencana ')->result();
-        $wilayah = $ci->db->query('SELECT a.id_kelurahan, a.nama, b.id FROM m_kelurahan a INNER JOIN pemetaan_bencana b ON b.kelurahan_id = a.id_kelurahan')->result();
+        $wilayah = $ci->db->query('SELECT a.id_kelurahan, a.nama, b.id FROM m_kelurahan a LEFT JOIN pemetaan_bencana b ON b.kelurahan_id = a.id_kelurahan WHERE b.year= "'.$year.'" ')->result();
         foreach($wilayah as $k=>$v)
         {
             

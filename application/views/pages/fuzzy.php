@@ -1,3 +1,8 @@
+<style>
+    .table > thead > tr > th, .table > tbody > tr > td {
+        padding: 2px 8px;
+    }
+</style>
 <div class="card">
     <div class="card-header">
         <h1 class="h3 text-center">Data Fuzzy Mamdani</h5>
@@ -12,7 +17,7 @@
                         <select class="form-control">
                             <option value="" disabled >Pilih Tahun</option>
                             <?php for($i=2020;$i<=date("Y");$i++) {
-                                echo '<option value="'.$i.'" >'.$i.'</option>';
+                                echo '<option value="'.$i.'" '. ($year == $i ? 'selected' : '') .' >'.$i.'</option>';
                             }?>
                         </select>
                     </div>
@@ -22,37 +27,58 @@
                 
             </div>
         </div>
-        
-        <table class="table table-striped">
-            <thead class="bg-info">
-                <tr>
-                    <th rowspan="2">ID</th>
-                    <th rowspan="2">Tahun</th>
-                    <th rowspan="2">Kelurahan</th>
-                    <th colspan="5">Bencana Hidrometeorologi</th>
-                </tr>
-                <tr>
-                    <th class="text-center">Tanah Longsor</th>
-                    <th class="text-center">Kekeringan</th>
-                    <th class="text-center">Banjir</th>
-                    <th class="text-center">Cuaca Ekstrim</th>
-                    <th class="text-center">Gempa Bumi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($data as $index=>$v) { ?>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="bg-info">
                     <tr>
-                        <td><?= $index+1 ?></td>
-                        <td><?= $v->year ?></td>
-                        <td><?= $v->nama ?></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
-                        <td class="text-center"></td>
+                        <th rowspan="4" style="vertical-align: middle;">No</th>
+                        <th rowspan="4" style="vertical-align: middle;">Tahun</th>
+                        <th rowspan="4" style="vertical-align: middle;">Kelurahan</th>
+                        <th colspan="60" class="text-center">Jumlah Bencana Hidrometeorologi</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                    <tr>
+                        <?php foreach($jbencana as $b) { ?>
+                        <th class="text-center bg-secondary" colspan="12"><?= $b->nama ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <?php for($i=0;$i< count($jbencana);$i++) { ?>
+                            <?php foreach($variable as $k=>$v) { ?>
+                            <th class="text-center" colspan="3"><?= $v->name. '&nbsp;('.$v->code.')' ?></th>
+                            <?php } ?>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <?php for($i=0;$i< count($jbencana);$i++) { ?>
+                            <?php foreach($variable as $k=>$v) { ?>
+                            <th class="text-center bg-secondary">Rendah</th>
+                            <th class="text-center bg-warning text-dark">Sedang</th>
+                            <th class="text-center bg-success">Tinggi</th>
+                            <?php } ?>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $i=1;
+                        foreach($data['results'] as $index=>$v) { ?>
+                        <tr>
+                            <td><?= $i++ ?></td>
+                            <td><?= $year ?></td>
+                            <td><?= $index ?></td>
+                            <?php foreach($jbencana as $b) { ?>
+                                <?php foreach($variable as $k=>$var) { 
+                                    $code = $var->code;    
+                                ?>
+                                <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Rendah'],2,",",".") ?></td>
+                                <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Sedang'],2,",",".") ?></td>
+                                <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Tinggi'],2,",",".") ?></td>
+                                <?php } ?>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

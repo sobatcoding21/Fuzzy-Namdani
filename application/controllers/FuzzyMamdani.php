@@ -6,19 +6,25 @@ class FuzzyMamdani extends MY_Controller {
     {
         parent::__construct();
         $this->load->library('Fuzzy');
-        $this->load->model(['Kecamatan', 'Kelurahan']);
+        $this->load->model(['Kecamatan', 'Kelurahan', 'Mbencana', 'FuzzyVariable']);
     }
 
     public function index()
     {
-        $fuzzy = new Fuzzy;
-        dd($fuzzy->output()['results']);
-
+        
         $year = 2020;
+        $fuzzy = new Fuzzy;
+        $results = $fuzzy->output($year);
+        #dd($results['results']);
         $config = [
             'title'     => 'Data Fuzzy Mamdani | BPBD Kota Kediri',
             'subtitle'  => 'Data Fuzzy Mamdani',
-            'content'   => $this->load->view('pages/fuzzy', ['data' => $this->Kelurahan->getBencana($year)], true)
+            'content'   => $this->load->view('pages/fuzzy', [
+                'data' => $results, 'year' => $year,
+                'kelurahan' => $this->Kelurahan->getAll(),
+                'jbencana' => $this->Mbencana->getAll(),
+                'variable' => $this->FuzzyVariable->getAll(),
+            ], true)
         ];
         $this->render($config);
     }

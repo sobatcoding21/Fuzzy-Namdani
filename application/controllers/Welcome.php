@@ -6,7 +6,7 @@ class Welcome extends MY_Controller {
 	public function __construct()
     {
         parent::__construct();
-        $this->load->model(['Kecamatan', 'Kelurahan', 'Mbencana', 'Bencana']);
+        $this->load->model(['Kecamatan', 'Kelurahan', 'Mbencana', 'Bencana', 'FuzzyVariable']);
     }
 
 	public function index()
@@ -19,6 +19,7 @@ class Welcome extends MY_Controller {
 							'tahun' => $year,
 							'kelurahan' => $this->Kelurahan->getAll(),
 							'jbencana' => $this->Mbencana->getAll(),
+							'variable' => $this->FuzzyVariable->getAll(),
 							'data' => $this->Kelurahan->getBencana($year)
 						], true)
 		];
@@ -28,20 +29,29 @@ class Welcome extends MY_Controller {
 	public function simpanBencana()
 	{
 		$p = $this->input->post();
-		$exist = $this->Bencana->find(['tahun' => $p['tahun'], 'id_kelurahan' => $p['id_kelurahan'], 'id_bencana' => $p['id_bencana']]);
+		$exist = $this->db->get_where('pemetaan_bencana', ['kelurahan_id' => $p['id_kelurahan'], 'year' => $p['tahun']])->row();
 		if( $exist )
 		{
+			$detail = $this->db->get_where('pemetaan_bencana_detail', ['pemetaan_id' => $exist->id, 'bencana_id' => $p['id_bencana']])->row();
+			if( $detail )
+			{
+				$this->db->where('id', $detail->id);
+				$this->db->update('pemetaan_bencana_detail', ['bencana' => $p['bencana'], 'populasi' => $p['populasi'], 'bangunan' => $p['bangunan'], 'faskes' => $p['faskes'] ]);
+			}else{
+				$this->db->insert('pemetaan_bencana_detail', ['pemetaan_id' => $exist->id, 'bencana_id' => $p['id_bencana'], 'bencana' => $p['bencana'], 'populasi' => $p['populasi'], 'bangunan' => $p['bangunan'], 'faskes' => $p['faskes'] ]);
+			}
+
 			setFlashMsg("Data bencana sudah pernah diinput sebelumnya", "info");
 		}else{
 
-			$this->Bencana->insert($p);
+			$this->db->insert('pemetaan_bencana', ['kelurahan_id' => $p['id_kelurahan'], 'year' => $p['tahun'], 'created_at' => date("Y-m-d H:i:s") ]);
+			$this->db->insert('pemetaan_bencana_detail', ['pemetaan_id' => $exist->id, 'bencana_id' => $p['id_bencana'], 'bencana' => $p['bencana'], 'populasi' => $p['populasi'], 'bangunan' => $p['bangunan'], 'faskes' => $p['faskes'] ]);
 			setFlashMsg("Data bencana berhasil disimpan");
 		}
 
 		redirect( base_url());
 		
 	}
-
 
 	public function dummyDb()
 	{
