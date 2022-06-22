@@ -81,10 +81,12 @@
             </div>
         </div>
     </div>
-    
-    <?php $this->load->view('inc/js') ?>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL-IYNvaZVdwEmB0t5goQu17wO6frHuVE&callback=initMap&v=weekly&sensor=false" async ></script>
     <script>const BASE_URL='<?= base_url();?>';</script>
+    <?php $this->load->view('inc/js') ?>
+    <?php if($this->uri->uri_string == 'peta') { ?>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL-IYNvaZVdwEmB0t5goQu17wO6frHuVE&callback=initMap&v=weekly&sensor=false" async ></script>
+    <?php } ?>
+    
     <?php 
         if($custom_js) { 
             echo '<script src='.$custom_js.'></script>';

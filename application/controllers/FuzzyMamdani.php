@@ -24,7 +24,8 @@ class FuzzyMamdani extends MY_Controller {
                 'kelurahan' => $this->Kelurahan->getAll(),
                 'jbencana' => $this->Mbencana->getAll(),
                 'variable' => $this->FuzzyVariable->getAll(),
-            ], true)
+            ], true),
+            'custom_js' => base_url('assets/js/fuzzy.js')
         ];
         $this->render($config);
     }

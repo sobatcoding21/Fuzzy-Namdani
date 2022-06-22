@@ -27,6 +27,13 @@
                 
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div id="chart1"></div>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead class="bg-info">
