@@ -72,31 +72,30 @@ class Fuzzy {
         #wilayah
         $ci =& get_instance();
         $bencana = $ci->db->query('SELECT * FROM m_bencana ')->result();
-        $wilayah = $ci->db->query('SELECT * FROM m_kelurahan ')->result();
+        $wilayah = $ci->db->query('SELECT a.id_kelurahan, a.nama, b.id FROM m_kelurahan a INNER JOIN pemetaan_bencana b ON b.kelurahan_id = a.id_kelurahan')->result();
         foreach($wilayah as $k=>$v)
         {
             
             foreach($bencana as $ib =>$b )
             {
-                
+                $detBencana = $ci->db->query('SELECT * FROM pemetaan_bencana_detail WHERE pemetaan_id = "'. $v->id .'" AND bencana_id = "'. $b->id .'" ')->row();
                 foreach($this->variable as $index=>$val)
                 {
-                    $attr = $val;
-                    $v->fuzzy_variable[$b->nama][$attr] = rand(10,55000);
-                    $results['results'][$v->nama]['membership'][$b->nama][$val] = $this->getMemberShip([
+                    $attr = strtolower($val);
+                    $v->fuzzy_variable[$b->nama][$attr] = $detBencana ? $detBencana->$attr : 0;
+
+                    $membership = $this->getMemberShip([
                         'key' => $val,
-                        'x' => $v->fuzzy_variable[$b->nama][$val]
+                        'x' => $v->fuzzy_variable[$b->nama][$attr]
                     ]);
+                    $results['results'][$v->nama][$b->nama][$val] = [
+                        'membership' => $membership['membership'],
+                        'nilai' => number_format($membership['nilai'],2,",","."),
+                        'nilai_huruf' => $membership['nilai_huruf'],
+                        ];
                 }
             }            
 
-            /*foreach($this->variable as $index=>$val)
-            {
-                $results[$v->nama][$val]['membership'] = $this->getMemberShip([
-                    'key' => $val,
-                    'x' => 250
-                ]);
-            }*/
         }
         
         
@@ -105,7 +104,12 @@ class Fuzzy {
 
     public function getMemberShip($param)
     {
-        return ['Rendah' => $this->_setLow($param['key'], $param['x']), 'Sedang' => $this->_setMedium($param['key'], $param['x']), 'Tinggi' => $this->_setHigh($param['key'], $param['x'])];
+        $arr = ['Rendah' => $this->_setLow($param['key'], $param['x']), 'Sedang' => $this->_setMedium($param['key'], $param['x']), 'Tinggi' => $this->_setHigh($param['key'], $param['x'])];
+
+        $nilaiKeanggotaan = min($arr);
+        $index = array_search(min($arr), $arr);
+
+        return ['membership' => $arr, 'nilai' => $nilaiKeanggotaan, 'nilai_huruf' => $index];
     }
 
     /**
