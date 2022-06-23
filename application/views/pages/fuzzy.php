@@ -28,13 +28,138 @@
             </div>
         </div>
         
-        <div class="row">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h4>Table Variable Fuzzy</h4>
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Variable Fuzzy</th>
+                            <th colspan="3">Fuzzy Set Range</th>
+                        </tr>
+                        <tr>
+                            <th>Rendah</th>
+                            <th>Sedang</th>
+                            <th>Tinggi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Bencana (di setiap kelurahan)</td>
+                            <td>0-4</td>
+                            <td>1-8</td>
+                            <td>> 4</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Kepadatan penduduk yang terdampak (di setiap kelurahan)</td>
+                            <td>0-23269</td>
+                            <td>2760-43778</td>
+                            <td>> 23269</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Jumlah bangunan yang terdampak (di setiap kelurahan)</td>
+                            <td>0-29240</td>
+                            <td>2760-51024</td>
+                            <td>> 29240</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Jumlah fasilitas kesehatan yang tersedia (di setiap kelurahan)</td>
+                            <td>0-72</td>
+                            <td>28-115</td>
+                            <td>> 72</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mb-4">
             <div class="col-md-3">
-                <div id="chart1"></div>
+                <div id="chartD"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="chartPD"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="chartNB"></div>
+            </div>
+            <div class="col-md-3">
+                <div id="chartHF"></div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h4>Fungsi Derajat Keanggotaan Fuzzy</h4>
+                <table class="table ">
+                    <tr>
+                        <td><b>uARendah[x]</b></td>
+                        <td>:</td>
+                        <td>1;</td>
+                        <td>if x ≤ a</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>(b - x) / (b - a);</td>
+                        <td>if a ≤ x < b</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>0;</td>
+                        <td>if x ≥ b</td>
+                    </tr>
+
+                    <tr>
+                        <td><b>uASedang[x]</b></td>
+                        <td>:</td>
+                        <td>0;</td>
+                        <td>if x ≤ a or x ≥ c</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>(x - a) / (b - a);</td>
+                        <td>if a ≤ x < b</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>(c - x) / (c - b);</td>
+                        <td>if b ≤ x < c</td>
+                    </tr>
+
+                    <tr>
+                        <td><b>uATinggi[x]</b></td>
+                        <td>:</td>
+                        <td>0;</td>
+                        <td>if x ≤ b</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>(x - b) / (c - b);</td>
+                        <td>if b ≤ x < c</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>1;</td>
+                        <td>if x ≥ c</td>
+                    </tr>
+
+                </table>
             </div>
         </div>
 
         <div class="table-responsive">
+            <h4>Perhitungan Derajat Keanggotaan Fuzzy</h4>
             <table class="table table-striped">
                 <thead class="bg-info">
                     <tr>
