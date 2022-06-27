@@ -1,5 +1,6 @@
 <div class="card">
     <div class="card-header">
+        <a href="<?= base_url('peta') ?>" class="btn btn-info"><i class="ti-back-left"></i> Kembali</a>
         <h1 class="h3 text-center">Peta Kerawanan <?= $title ?></h5>
     </div>
     <div class="card-body">

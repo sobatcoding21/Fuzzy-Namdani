@@ -99,17 +99,20 @@ class Fuzzy {
                     $results['rules'][$b->nama][$v->nama]['if'][$val] = $membership['nilai_huruf'];
                     $results['rules'][$b->nama][$v->nama]['if_nilai'][$val] = number_format($membership['nilai'],2,",",".");
                     $results['rules'][$b->nama][$v->nama]['max'] = $membership['max_huruf'];
+                    $results['rules'][$b->nama][$v->nama]['weight'] = $membership['weight'];
                     $results['rules'][$b->nama][$v->nama]['min_nilai'] = number_format($membership['nilai'],2,",",".");
                     
                     //Defuzzy
-                    $results['defuzzy'][$b->nama][$v->nama][$val] = [];
+                    $results['defuzzy'][$v->nama][$b->nama]['up'][$val] = $membership['nilai'] * $membership['weight'];
+                    $results['defuzzy'][$v->nama][$b->nama]['down'][$val] = $membership['nilai'];
+                    $results['defuzzy'][$v->nama][$b->nama]['text'][$val] = $membership['nilai'] . '*'. $membership['weight'];
                 }
 
                 //REFORMAT rules                
             }            
 
         }
-        dd($results['defuzzy']);
+        
         if(!empty($results['rules']))
         {
             foreach($results['rules'] as $bencana => $val)
@@ -128,33 +131,81 @@ class Fuzzy {
                         $n++;
                     }
 
-                    $w = '';
-                    switch($data['max'])
-                    {   
-                        case 'Rendah':
-                            $w = 1;
-                            break;
-                        case 'Sedang':
-                            $w = 2;
-                            break;
-                        case 'Tinggi':
-                            $w = 3;
-                            break;
-                    }
                     $cont = $cont . '<b>Single Risk ' .strtoupper($data['max']).'</b>';
-                    $cont .= '<br/>Weight : <b>'. $w.'</b>';
+                    $cont .= '<br/>Weight : <b>'. $data['weight'].'</b>';
 
                     $pred = '('. implode(";",$data['if_nilai']) .') = '.$data['min_nilai'].' (min)';
                     $cont .= ' Predic : <b>'. $pred .'</b>';
 
                     $results['rules'][$bencana][$kelurahan] = $cont;
                 }
-
-                #$results['rules'][$bencana] = array_unique(array_values($results['rules'][$bencana]));
                 
             }
         }
-        #dd($results['rules']);
+
+        if(!empty($results['defuzzy']))
+        {
+            foreach($results['defuzzy'] as $kelurahan => $val)
+            {
+                
+                foreach($val as $bencana => $item )
+                {
+                    //Build Rumus
+                    $pembilang = 0;
+                    $penyebut = 0;
+                    $rumus = '';
+                    foreach($item['text'] as $key => $txt)
+                    {
+                        $rumus .= '('. $txt.') + ';
+                    }
+
+                    $rumus = rtrim($rumus, "+ "). ' / ';
+
+                    foreach($item['down'] as $key => $txt)
+                    {
+                        $rumus .= $txt. ' + ';
+                        $penyebut = $penyebut + $txt;
+                    }
+                    $rumus = rtrim($rumus, " + ");
+
+                    //Build Total
+                    foreach($item['up'] as $key => $n)
+                    {
+                        $pembilang = $pembilang + $n;
+                    }
+
+                    $total = $penyebut > 0 ? ($pembilang / $penyebut) : 0;
+                    $results['defuzzy'][$kelurahan][$bencana] = [
+                        'rumus' => 'z= '. $rumus . ' = '. $total,
+                        'total' => $total,
+                        'output'=> $this->getFuzzyOutput($total)
+                    ];
+
+                    #save
+                    $mkelurahan = $ci->db->select('id_kelurahan')->get_where('m_kelurahan', ['nama' => $kelurahan])->row();
+                    $mbencana = $ci->db->select('id')->get_where('m_bencana', ['nama' => $bencana])->row();
+
+                    $head = ['tahun' => $year, 'id_kelurahan' => $mkelurahan->id_kelurahan];
+                    $exist = $ci->db->select('id')->get_where('fuzzy_results', $head)->row();
+                    if(!$exist)
+                    {
+                        $exist = $ci->db->insert('fuzzy_results', $head);
+                        $id = $ci->db->insert_id();
+                    }else{
+                        $id = $exist->id;
+                    }
+
+                    $existDet = $ci->db->select('fuzzy_id')->get_where('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id])->row();
+                    if(!$existDet)
+                    {
+                        $ci->db->insert('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id, 'out' => $total, 'status' => $this->getFuzzyOutput($total) ]);
+                    }
+
+                }
+                
+            }
+        }
+
         return $results;
     }
 
@@ -168,7 +219,9 @@ class Fuzzy {
         $max = max($arr);
         $indexMax = array_search(max($arr), $arr);
 
-        return ['membership' => $arr, 'nilai' => $nilaiKeanggotaan, 'nilai_huruf' => $index, 'max' => $max, 'max_huruf' => $indexMax ];
+        $weight = $this->getWeight($indexMax);
+
+        return ['membership' => $arr, 'nilai' => $nilaiKeanggotaan, 'nilai_huruf' => $index, 'max' => $max, 'max_huruf' => $indexMax, 'weight' => $weight ];
     }
 
     /**
@@ -233,6 +286,42 @@ class Fuzzy {
         }
 
         return $out;
+    }
+
+    public function getWeight($data)
+    {
+        $w = '';
+        switch($data)
+        {   
+            case 'Rendah':
+                $w = 1;
+                break;
+            case 'Sedang':
+                $w = 2;
+                break;
+            case 'Tinggi':
+                $w = 3;
+                break;
+        }
+
+        return $w;
+    }
+
+    public function getFuzzyOutput($total)
+    {
+        $o = 'Rendah';
+        if( $o > 1 )
+        {
+            $o = 'Rendah';
+        }else if( $o > 1.5 )
+        {
+            $o = 'Sedang';
+        }else if( $o > 2.5 )
+        {
+            $o = 'Tinggi';
+        }
+
+        return $o;
     }
 
 }

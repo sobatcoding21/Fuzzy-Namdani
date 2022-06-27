@@ -275,36 +275,8 @@
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <h4>Defuzzification</h4>
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <?php foreach($jbencana as $index=>$val) { ?>
-                        <a class="nav-item nav-link <?= $index == 0 ? 'active' : '' ?>" id="nav-<?= $index?>-tab" data-toggle="tab" href="#nav-<?= $index ?>" role="tab" aria-controls="nav-<?= $index?>" aria-selected="true"><?= $val->nama ?></a>
-                        <?php } ?>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <?php foreach($jbencana as $index=>$val) { 
-                    ?>
-                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : '' ?> card-body" id="nav-<?= $index?>" role="tabpanel" aria-labelledby="nav-<?= $index?>-tab">
-                        
-                        <ul>
-                            <?php 
-                                $i = 1;
-                                foreach($data['rules'][$val->nama] as $k => $v) { ?>
-                                <li><?= '[R'.($i++).']&nbsp;'. $v ?></li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-
         <div class="table-responsive mb-4">
-            <h4>Second Phase Fuzzy</h4>
+            <h4>Defuzzification</h4>
             <table class="table table-striped">
                 <thead class="bg-info">
                     <tr>
@@ -325,13 +297,50 @@
                             <td><?= $year ?></td>
                             <td><?= $index ?></td>
                             <?php foreach($jbencana as $b) { ?>
-                                <td class="text-center">0</td>
+                                <td class="text-center"><?= $data['defuzzy'][$index][$b->nama]['rumus'] ?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody>
-            </table>
-                            
+            </table>             
         </div>
+
+        <div class="table-responsive mb-4">
+            <h4>Output and Results</h4>
+            <table class="table table-striped">
+                <thead class="bg-info">
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle;">No</th>
+                        <th rowspan="2" style="vertical-align: middle;">Tahun</th>
+                        <th rowspan="2" style="vertical-align: middle;">Kelurahan</th>
+                        <?php foreach($jbencana as $k=>$v) { ?>
+                            <th class="text-center" colspan="2"><?= $v->nama; ?></th>
+                        <?php } ?>
+                    </tr>
+                    <tr>
+                        <?php foreach($jbencana as $k=>$v) { ?>
+                            <th class="text-center" >Crisp Output</th>
+                            <th class="text-center" >Fuzzy Output</th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $i=1;
+                        foreach($data['results'] as $index=>$v) { ?>
+                        <tr>
+                            <td><?= $i++ ?></td>
+                            <td><?= $year ?></td>
+                            <td><?= $index ?></td>
+                            <?php foreach($jbencana as $b) { ?>
+                                <td class="text-center"><?= $data['defuzzy'][$index][$b->nama]['total'] ?></td>
+                                <td class="text-center"><?= $data['defuzzy'][$index][$b->nama]['output'] ?></td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>             
+        </div>
+
     </div>
 </div>
