@@ -88,17 +88,73 @@ class Fuzzy {
                         'key' => $val,
                         'x' => $v->fuzzy_variable[$b->nama][$attr]
                     ]);
+                    
+                    //[Results][nama_kelurahan][nama_bencana][Bencana|Populasi|Bangunan|Faskes]
                     $results['results'][$v->nama][$b->nama][$val] = [
                         'membership' => $membership['membership'],
                         'nilai' => number_format($membership['nilai'],2,",","."),
                         'nilai_huruf' => $membership['nilai_huruf'],
                         ];
+
+                    $results['rules'][$b->nama][$v->nama]['if'][$val] = $membership['nilai_huruf'];
+                    $results['rules'][$b->nama][$v->nama]['if_nilai'][$val] = number_format($membership['nilai'],2,",",".");
+                    $results['rules'][$b->nama][$v->nama]['max'] = $membership['max_huruf'];
+                    $results['rules'][$b->nama][$v->nama]['min_nilai'] = number_format($membership['nilai'],2,",",".");
+                    
+                    //Defuzzy
+                    $results['defuzzy'][$b->nama][$v->nama][$val] = [];
                 }
+
+                //REFORMAT rules                
             }            
 
         }
-        
-        
+        dd($results['defuzzy']);
+        if(!empty($results['rules']))
+        {
+            foreach($results['rules'] as $bencana => $val)
+            {
+                
+                foreach($val as $kelurahan => $data)
+                {
+                    
+                    $cont = '';
+                    $n = 0;
+                    $maxs= '';
+                    foreach($data['if'] as $index => $d) {
+                        
+                        $cont .= $n == 0 ? 'IF ': '';
+                        $cont .= '<b>'. $index. ' ' .$d. '</b> THEN ';
+                        $n++;
+                    }
+
+                    $w = '';
+                    switch($data['max'])
+                    {   
+                        case 'Rendah':
+                            $w = 1;
+                            break;
+                        case 'Sedang':
+                            $w = 2;
+                            break;
+                        case 'Tinggi':
+                            $w = 3;
+                            break;
+                    }
+                    $cont = $cont . '<b>Single Risk ' .strtoupper($data['max']).'</b>';
+                    $cont .= '<br/>Weight : <b>'. $w.'</b>';
+
+                    $pred = '('. implode(";",$data['if_nilai']) .') = '.$data['min_nilai'].' (min)';
+                    $cont .= ' Predic : <b>'. $pred .'</b>';
+
+                    $results['rules'][$bencana][$kelurahan] = $cont;
+                }
+
+                #$results['rules'][$bencana] = array_unique(array_values($results['rules'][$bencana]));
+                
+            }
+        }
+        #dd($results['rules']);
         return $results;
     }
 
@@ -109,7 +165,10 @@ class Fuzzy {
         $nilaiKeanggotaan = min($arr);
         $index = array_search(min($arr), $arr);
 
-        return ['membership' => $arr, 'nilai' => $nilaiKeanggotaan, 'nilai_huruf' => $index];
+        $max = max($arr);
+        $indexMax = array_search(max($arr), $arr);
+
+        return ['membership' => $arr, 'nilai' => $nilaiKeanggotaan, 'nilai_huruf' => $index, 'max' => $max, 'max_huruf' => $indexMax ];
     }
 
     /**
@@ -117,7 +176,7 @@ class Fuzzy {
      */
     public function _setLow($key, $x=0)
     {
-        $a = $this->range['linguistik'][$key]['domain']['Rendah'][0];
+        $a = $this->range['linguistik'][$key]['domain']['Sedang'][0];
         $b = $this->range['linguistik'][$key]['domain']['Rendah'][1];
     
         $out=0;
@@ -160,8 +219,8 @@ class Fuzzy {
      */
     public function _setHigh($key, $x=0)
     {
-        $b = $this->range['linguistik'][$key]['domain']['Sedang'][1];
-        $c = $this->range['linguistik'][$key]['domain']['Tinggi'][0];
+        $b = $this->range['linguistik'][$key]['domain']['Tinggi'][0];
+        $c = $this->range['linguistik'][$key]['domain']['Sedang'][1];
 
         $out=0;
         if( $x <= $b ) {

@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     //Disaster
-    var catD = ["0","2","4","6","8"];
+    var catD = ["0","1","4","8","10"];
     var seriesD = [
         {
             name: 'Rendah',
@@ -17,10 +17,10 @@ $(document).ready(function() {
         },
         
     ];
-    SetDiagram('chartD', 'Diagram Fuzzy Variable Bencana (D)', catD, seriesD);
+    SetDiagram('chartD', 'Variable Bencana (D)', catD, seriesD);
 
     //Populasi
-    var catPD = ["0","2000","4000","6000","8000"];
+    var catPD = ["0","2760","23269","43778","6000"];
     var seriesPD = [
         {
             name: 'Rendah',
@@ -36,10 +36,10 @@ $(document).ready(function() {
         },
         
     ];
-    SetDiagram('chartPD', 'Diagram Fuzzy Variable Populasi (PD)', catPD, seriesPD);
+    SetDiagram('chartPD', 'Variable Populasi (PD)', catPD, seriesPD);
 
     //Bangunan Terdampak
-    var catNB = ["0","10","20","30","40"];
+    var catNB = ["0","2760","29240","51024","6000"];
     var seriesNB = [
         {
             name: 'Rendah',
@@ -55,10 +55,10 @@ $(document).ready(function() {
         },
         
     ];
-    SetDiagram('chartNB', 'Diagram Fuzzy Variable Bangunan Terdampak (NB)', catNB, seriesNB);
+    SetDiagram('chartNB', 'Var Bang.Terdam (NB)', catNB, seriesNB);
 
     //Faskes
-    var catHF = ["0","2","4","6","8"];
+    var catHF = ["0","28","72","115","200"];
     var seriesHF= [
         {
             name: 'Rendah',
@@ -74,7 +74,7 @@ $(document).ready(function() {
         },
         
     ];
-    SetDiagram('chartHF', 'Diagram Fuzzy Variable Faskes (HF)', catHF, seriesHF);
+    SetDiagram('chartHF', 'Variable Faskes (HF)', catHF, seriesHF);
 
 
 

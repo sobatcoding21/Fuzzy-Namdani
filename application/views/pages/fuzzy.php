@@ -28,7 +28,7 @@
             </div>
         </div>
         
-        <div class="row mb-5">
+        <div class="row mb-4">
             <div class="col-md-12">
                 <h4>Table Variable Fuzzy</h4>
                 <table class="table ">
@@ -158,25 +158,57 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <h4>Perhitungan Derajat Keanggotaan Fuzzy</h4>
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h4>Table Fuzzy Output Range</h4>
+                <table class="table ">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Range</th>
+                            <th>Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>1-1.5</td>
+                            <td>Rendah</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>1.5-2.5</td>
+                            <td>Sedang</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>2.5-3</td>
+                            <td>Tinggi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-responsive mb-4">
+            <h4>Perhitungan Nilai Derajat Keanggotaan Fuzzy</h4>
             <table class="table table-striped">
                 <thead class="bg-info">
                     <tr>
                         <th rowspan="4" style="vertical-align: middle;">No</th>
                         <th rowspan="4" style="vertical-align: middle;">Tahun</th>
                         <th rowspan="4" style="vertical-align: middle;">Kelurahan</th>
-                        <th colspan="60" class="text-center">Jumlah Bencana Hidrometeorologi</th>
+                        <th colspan="80" class="text-center">Jumlah Bencana Hidrometeorologi</th>
                     </tr>
                     <tr>
                         <?php foreach($jbencana as $b) { ?>
-                        <th class="text-center bg-secondary" colspan="12"><?= $b->nama ?></th>
+                        <th class="text-center bg-secondary" colspan="16"><?= $b->nama ?></th>
                         <?php } ?>
                     </tr>
                     <tr>
                         <?php for($i=0;$i< count($jbencana);$i++) { ?>
                             <?php foreach($variable as $k=>$v) { ?>
-                            <th class="text-center" colspan="3"><?= $v->name. '&nbsp;('.$v->code.')' ?></th>
+                            <th class="text-center" colspan="4"><?= $v->name. '&nbsp;('.$v->code.')' ?></th>
                             <?php } ?>
                         <?php } ?>
                     </tr>
@@ -185,7 +217,8 @@
                             <?php foreach($variable as $k=>$v) { ?>
                             <th class="text-center bg-secondary">Rendah</th>
                             <th class="text-center bg-warning text-dark">Sedang</th>
-                            <th class="text-center bg-success">Tinggi</th>
+                            <th class="text-center bg-danger">Tinggi</th>
+                            <th class="text-center bg-success">Predic</th>
                             <?php } ?>
                         <?php } ?>
                     </tr>
@@ -205,12 +238,100 @@
                                 <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Rendah'],2,",",".") ?></td>
                                 <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Sedang'],2,",",".") ?></td>
                                 <td class="text-center"><?= number_format($v[$b->nama][$var->name]['membership']['Tinggi'],2,",",".") ?></td>
+                                <td class="text-center"><b><?= $v[$b->nama][$var->name]['nilai']. '&nbsp;('.$v[$b->nama][$var->name]['nilai_huruf'].')' ?></b></td>
                                 <?php } ?>
                             <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h4>IF THEN RULE</h4>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <?php foreach($jbencana as $index=>$val) { ?>
+                        <a class="nav-item nav-link <?= $index == 0 ? 'active' : '' ?>" id="nav-<?= $index?>-tab" data-toggle="tab" href="#nav-<?= $index ?>" role="tab" aria-controls="nav-<?= $index?>" aria-selected="true"><?= $val->nama ?></a>
+                        <?php } ?>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <?php foreach($jbencana as $index=>$val) { 
+                    ?>
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : '' ?> card-body" id="nav-<?= $index?>" role="tabpanel" aria-labelledby="nav-<?= $index?>-tab">
+                        
+                        <ul>
+                            <?php 
+                                $i = 1;
+                                foreach($data['rules'][$val->nama] as $k => $v) { ?>
+                                <li><?= '[R'.($i++).']&nbsp;'. $v ?></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <h4>Defuzzification</h4>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <?php foreach($jbencana as $index=>$val) { ?>
+                        <a class="nav-item nav-link <?= $index == 0 ? 'active' : '' ?>" id="nav-<?= $index?>-tab" data-toggle="tab" href="#nav-<?= $index ?>" role="tab" aria-controls="nav-<?= $index?>" aria-selected="true"><?= $val->nama ?></a>
+                        <?php } ?>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <?php foreach($jbencana as $index=>$val) { 
+                    ?>
+                    <div class="tab-pane fade show <?= $index == 0 ? 'active' : '' ?> card-body" id="nav-<?= $index?>" role="tabpanel" aria-labelledby="nav-<?= $index?>-tab">
+                        
+                        <ul>
+                            <?php 
+                                $i = 1;
+                                foreach($data['rules'][$val->nama] as $k => $v) { ?>
+                                <li><?= '[R'.($i++).']&nbsp;'. $v ?></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive mb-4">
+            <h4>Second Phase Fuzzy</h4>
+            <table class="table table-striped">
+                <thead class="bg-info">
+                    <tr>
+                        <th rowspan="4" style="vertical-align: middle;">No</th>
+                        <th rowspan="4" style="vertical-align: middle;">Tahun</th>
+                        <th rowspan="4" style="vertical-align: middle;">Kelurahan</th>
+                        <?php foreach($jbencana as $k=>$v) { ?>
+                            <th class="text-center" ><?= $v->nama; ?></th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $i=1;
+                        foreach($data['results'] as $index=>$v) { ?>
+                        <tr>
+                            <td><?= $i++ ?></td>
+                            <td><?= $year ?></td>
+                            <td><?= $index ?></td>
+                            <?php foreach($jbencana as $b) { ?>
+                                <td class="text-center">0</td>
+                            <?php } ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+                            
         </div>
     </div>
 </div>
