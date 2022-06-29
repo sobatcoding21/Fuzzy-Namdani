@@ -18,5 +18,8 @@
 <!-- menu js -->
 <script src="<?= base_url() ?>assets/js/pcoded.min.js"></script>
 <script src="<?= base_url() ?>assets/js/vertical-layout.min.js "></script>
+<script src="<?= base_url() ?>assets/js/leaflet/leaflet.js"></script>
 <!-- custom js -->
+<script src="<?= base_url('geojson/kediri_geo.js') ?>" ></script>
+<script src="<?= base_url('geojson/kediri_mapping.js') ?>" ></script>
 <script type="text/javascript" src="<?= base_url() ?>assets/js/script.js "></script>

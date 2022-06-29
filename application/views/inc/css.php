@@ -10,8 +10,7 @@
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/icon/font-awesome/css/font-awesome.min.css">
 <!-- scrollbar.css -->
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/jquery.mCustomScrollbar.css">
-<!-- am chart export.css -->
-<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/js/leaflet/leaflet.css">
 <!-- Style.css -->
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/style.css">
 <link rel="stylesheet" type="text/css" href="<?= base_url() ?>assets/css/weather.css">

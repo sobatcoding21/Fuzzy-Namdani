@@ -50,6 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['dummy-db'] = 'welcome/dummyDb';
+$route['getgeojson'] = 'peta/getGeoJson';
 $route['peta-bencana'] = 'peta/dataPetaBencana';
 $route['save-data-bencana'] = 'welcome/simpanBencana';
 $route['fuzzy-mamdani'] = 'fuzzyMamdani/index';

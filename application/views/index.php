@@ -53,7 +53,7 @@
                                     <div class="col-md-4">
                                         <ul class="breadcrumb-title">
                                             <li class="breadcrumb-item">
-                                                <a href="index.html"> <i class="fa fa-home"></i> </a>
+                                                <a href="<?= base_url() ?>"> <i class="fa fa-home"></i> </a>
                                             </li>
                                             <li class="breadcrumb-item"><a href="#!"><?= $subtitle ? $subtitle : '' ?></a>
                                             </li>
@@ -83,7 +83,7 @@
     </div>
     <script>const BASE_URL='<?= base_url();?>';</script>
     <?php $this->load->view('inc/js') ?>
-    <?php if($this->uri->uri_string == 'peta') { ?>
+    <?php if($this->uri->uri_string == 'peta' && $this->input->get('q') ) { ?>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL-IYNvaZVdwEmB0t5goQu17wO6frHuVE&callback=initMap&v=weekly&sensor=false" async ></script>
     <?php } ?>
     
