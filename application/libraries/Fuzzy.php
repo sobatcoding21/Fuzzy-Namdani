@@ -45,17 +45,17 @@ class Fuzzy {
                 'Bangunan' => [
                     'himpunan' => ['Rendah', 'Sedang', 'Tinggi'],
                     'domain'    => [
-                        'Rendah' => [0,29240],
-                        'Sedang' => [2456,51024],
-                        'Tinggi' => [29240]
+                        'Rendah' => [0,500],
+                        'Sedang' => [500,1000],
+                        'Tinggi' => [1000]
                     ]
                 ],
                 'Faskes' => [
                     'himpunan' => ['Rendah', 'Sedang', 'Tinggi'],
                     'domain'    => [
-                        'Rendah' => [0,72],
-                        'Sedang' => [28,115],
-                        'Tinggi' => [72]
+                        'Rendah' => [0,500],
+                        'Sedang' => [500,1000],
+                        'Tinggi' => [1000]
                     ]
                 ]
             ]

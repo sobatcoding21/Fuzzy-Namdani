@@ -39,7 +39,7 @@ $(document).ready(function() {
     SetDiagram('chartPD', 'Variable Populasi (PD)', catPD, seriesPD);
 
     //Bangunan Terdampak
-    var catNB = ["0","2760","29240","51024","6000"];
+    var catNB = ["0","500","1000","2000","3000"];
     var seriesNB = [
         {
             name: 'Rendah',
@@ -58,7 +58,7 @@ $(document).ready(function() {
     SetDiagram('chartNB', 'Var Bang.Terdam (NB)', catNB, seriesNB);
 
     //Faskes
-    var catHF = ["0","28","72","115","200"];
+    var catHF = ["0","500","1000","2000","3000"];
     var seriesHF= [
         {
             name: 'Rendah',

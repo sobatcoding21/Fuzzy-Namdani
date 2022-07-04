@@ -48,7 +48,7 @@
                     <tr>
                         <?php for($i=0;$i< count($jbencana);$i++) { ?>
                         <?php foreach($variable as $k=>$v) { ?>
-                        <th class="text-center"><?= $v->name. '&nbsp;('.$v->code.')' ?></th>
+                        <th class="text-center"><?= '['.$v->code.']&nbsp;' .$v->name ?> <?= in_array($v->name, ['Bangunan', 'Faskes']) ? '(Miliar)' : '' ?></th>
                         <?php } ?>
                         <?php } ?>
                         

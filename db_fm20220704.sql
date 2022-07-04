@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.7.33 - MySQL Community Server (GPL)
--- Server OS:                    Win64
--- HeidiSQL Version:             11.2.0.6213
+-- Server version:               5.7.24 - MySQL Community Server (GPL)
+-- Server OS:                    Win32
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,11 +11,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
--- Dumping database structure for db_fm
-CREATE DATABASE IF NOT EXISTS `db_fm` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `db_fm`;
 
 -- Dumping structure for table db_fm.fuzzy_himpunan
 CREATE TABLE IF NOT EXISTS `fuzzy_himpunan` (
@@ -37,12 +32,12 @@ INSERT INTO `fuzzy_himpunan` (`id`, `variable_id`, `nilai`, `min`, `max`) VALUES
 	(4, 2, 'Rendah', 0, 23269),
 	(5, 2, 'Sedang', 2760, 43778),
 	(6, 2, 'Tinggi', 23269, 0),
-	(7, 3, 'Rendah', 0, 29240),
-	(8, 3, 'Sedang', 2760, 51024),
-	(9, 3, 'Tinggi', 29240, 0),
-	(10, 4, 'Rendah', 0, 72),
-	(11, 4, 'Sedang', 28, 115),
-	(12, 4, 'Tinggi', 72, 0);
+	(7, 3, 'Rendah', 0, 500),
+	(8, 3, 'Sedang', 500, 1000),
+	(9, 3, 'Tinggi', 1000, 0),
+	(10, 4, 'Rendah', 0, 500),
+	(11, 4, 'Sedang', 500, 1000),
+	(12, 4, 'Tinggi', 1000, 0);
 /*!40000 ALTER TABLE `fuzzy_himpunan` ENABLE KEYS */;
 
 -- Dumping structure for table db_fm.fuzzy_results
@@ -377,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `m_bencana` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_fm.m_bencana: ~4 rows (approximately)
+-- Dumping data for table db_fm.m_bencana: ~5 rows (approximately)
 DELETE FROM `m_bencana`;
 /*!40000 ALTER TABLE `m_bencana` DISABLE KEYS */;
 INSERT INTO `m_bencana` (`id`, `nama`) VALUES
@@ -395,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `m_kecamatan` (
   PRIMARY KEY (`id_kecamatan`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table db_fm.m_kecamatan: ~2 rows (approximately)
+-- Dumping data for table db_fm.m_kecamatan: ~3 rows (approximately)
 DELETE FROM `m_kecamatan`;
 /*!40000 ALTER TABLE `m_kecamatan` DISABLE KEYS */;
 INSERT INTO `m_kecamatan` (`id_kecamatan`, `nama`) VALUES
