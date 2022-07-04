@@ -199,6 +199,10 @@ class Fuzzy {
                     if(!$existDet)
                     {
                         $ci->db->insert('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id, 'out' => $total, 'status' => $this->getFuzzyOutput($total) ]);
+                    }else{
+                        $ci->db->where('fuzzy_id', $id);
+                        $ci->db->where('id_bencana', $mbencana->id);
+                        $ci->db->update('fuzzy_result_details', ['out' => $total, 'status' => $this->getFuzzyOutput($total) ]);
                     }
 
                 }
