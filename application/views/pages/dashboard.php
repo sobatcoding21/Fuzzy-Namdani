@@ -64,7 +64,7 @@
                                 <?php foreach($variable as $k=>$var) { 
                                     $code = $var->code;    
                                 ?>
-                                <td class="text-center"><?= $v->info[$b->nama]->$code ?></td>
+                                <td class="text-center"><?= number_format($v->info[$b->nama]->$code,0,",",".") ?></td>
                                 <?php } ?>
                             <?php } ?>
                         </tr>
