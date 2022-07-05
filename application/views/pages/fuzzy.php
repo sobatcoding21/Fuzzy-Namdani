@@ -62,16 +62,16 @@
                         <tr>
                             <td>3</td>
                             <td>Jumlah bangunan yang terdampak (di setiap kelurahan)</td>
-                            <td>0-500</td>
-                            <td>500-1000</td>
-                            <td>> 1000</td>
+                            <td>0-500 JT</td>
+                            <td>500 JT -1 M</td>
+                            <td>> 1 M</td>
                         </tr>
                         <tr>
                             <td>4</td>
                             <td>Jumlah fasilitas kesehatan yang tersedia (di setiap kelurahan)</td>
-                            <td>0-500</td>
-                            <td>500-1000</td>
-                            <td>> 1000</td>
+                            <td>0-500 JT</td>
+                            <td>500 JT - 1 M</td>
+                            <td>> 1 M</td>
                         </tr>
                     </tbody>
                 </table>
