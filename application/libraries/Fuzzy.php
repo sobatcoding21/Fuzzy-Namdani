@@ -127,10 +127,16 @@ class Fuzzy {
                     foreach($data['if'] as $index => $d) {
                         
                         $cont .= $n == 0 ? 'IF ': '';
-                        $cont .= '<b>'. $index. ' ' .$d. '</b> THEN ';
+                        $cont .= '<b>'. $index. ' ' .$d. '</b> AND ';
                         $n++;
                     }
 
+                    //Formating IF .. AND .. AND .. THEN
+                    $explode = explode("AND", $cont);
+                    array_pop($explode);
+                    $implode = implode("AND", $explode);
+                    $cont = $implode. ' THEN ';
+                    
                     $cont = $cont . '<b>Single Risk ' .strtoupper($data['max']).'</b>';
                     $cont .= '<br/>Weight : <b>'. $data['weight'].'</b>';
 
