@@ -14,7 +14,7 @@
 		 	        1; 		if x ≥ c		      		(3)
   
  */
-class Fuzzy {
+class Fuzzy_old {
 
 
     private $variable;
@@ -152,8 +152,33 @@ class Fuzzy {
                         'nilai_huruf' => $membership['nilai_huruf'],
                         ];
 
+                    /*$results['rules'][$v->nama][$b->nama]['if'][$val] = $membership['nilai_huruf'];
+                    $results['rules'][$v->nama][$b->nama]['if_nilai'][$val] = $membership['nilai'];
+                    $results['rules'][$v->nama][$b->nama]['max'] = $membership['max_huruf'];
+                    $results['rules'][$v->nama][$b->nama]['weight'] = $membership['weight'];
+                    $results['rules'][$v->nama][$b->nama]['min_nilai'] = number_format($membership['nilai'],2,",",".");*/
+                    
+                    //Defuzzy
+                    #$results['defuzzy'][$v->nama][$b->nama]['up'][$val] = $membership['nilai'] * $membership['weight'];
+                    #$results['defuzzy'][$v->nama][$b->nama]['down'][$val] = $membership['nilai'];
+                    #$results['defuzzy'][$v->nama][$b->nama]['text'][$val] = $membership['nilai'] . '*'. $membership['weight'];
                 }
 
+                //GET Predict
+                /*$arr = $results['rules'][$v->nama][$b->nama]['if_nilai'];
+                $predict = min($arr);
+                $indexPredict = array_search(min($arr), $arr);
+                $predictHuruf = $results['rules'][$v->nama][$b->nama]['if'][$indexPredict];
+                $weight = $this->getWeight($predictHuruf);
+
+                $results['rules'][$v->nama][$b->nama]['predict'] = $predict;    
+                $results['rules'][$v->nama][$b->nama]['predict_huruf'] = $predictHuruf;
+                $results['rules'][$v->nama][$b->nama]['weight'] = $weight;
+                
+                //DEFUZZY
+                $results['defuzzy'][$v->nama][$b->nama]['up'] = $predict * $weight;
+                $results['defuzzy'][$v->nama][$b->nama]['down'] = $predict;
+                $results['defuzzy'][$v->nama][$b->nama]['text'] = $predict .'x'. $weight;*/
             }            
 
         }
@@ -212,7 +237,7 @@ class Fuzzy {
 
                         foreach($results['rules'][$kl][$bc]['nilai'] as $kN => $n )
                         {
-                            $results['rules'][$kl][$bc]['min'][$kN] = number_format(min($n),2);
+                            $results['rules'][$kl][$bc]['min'][$kN] = min($n);
 
                             $indexFind = array_search(min($n), $n);
                             $results['rules'][$kl][$bc]['caption'][$kN] = $results['rules'][$kl][$bc]['array'][$kN][$indexFind];
@@ -243,16 +268,108 @@ class Fuzzy {
                         $results['defuzzy'][$kl][$bc]['total_down'] = isset($results['defuzzy'][$kl][$bc]['total_down']) ? ($results['defuzzy'][$kl][$bc]['total_down']+$results['defuzzy'][$kl][$bc]['down'][$index]) : $results['defuzzy'][$kl][$bc]['down'][$index];
 
                         $results['defuzzy'][$kl][$bc]['z'] = $results['defuzzy'][$kl][$bc]['total_down'] > 0 ? $results['defuzzy'][$kl][$bc]['total_up'] / $results['defuzzy'][$kl][$bc]['total_down'] : 0;
-                        $results['defuzzy'][$kl][$bc]['output'] = $this->getFuzzyOutput($results['defuzzy'][$kl][$bc]['z']);
+
                     }
 
                     $pembilang = implode(" + ", $results['defuzzy'][$kl][$bc]['up_text']);
                     $penyebut = implode(" + ", $results['defuzzy'][$kl][$bc]['down']);
                     $results['defuzzy'][$kl][$bc]['rumus'] = 'z='. $pembilang ." / ". $penyebut. ' = '. $results['defuzzy'][$kl][$bc]['z'];
 
-                    #save to DB
-                    $mkelurahan = $ci->db->select('id_kelurahan')->get_where('m_kelurahan', ['nama' => $kl])->row();
-                    $mbencana = $ci->db->select('id')->get_where('m_bencana', ['nama' => $bc])->row();
+                }
+            }
+        };
+        #dd($results['defuzzy']);
+        return $results;
+        #dd($results['rules']);
+
+        if(!empty($results['rules']))
+        {
+            foreach($results['rules'] as $kelurahan => $val)
+            {
+                
+                foreach($val as $bencana => $data)
+                {
+                    
+                    $cont = '';
+                    $n = 0;
+                    $maxs= '';
+                    
+                    foreach($data['if'] as $index => $d) {
+                        
+                        $cont .= $n == 0 ? 'IF ': '';
+                        $cont .= '<b>'. $index. ' ' .$d. '</b> AND ';
+                        $n++;
+                    }
+
+                    //Formating IF .. AND .. AND .. THEN
+                    $explode = explode("AND", $cont);
+                    array_pop($explode);
+                    $implode = implode("AND", $explode);
+                    $cont = $implode. ' THEN ';
+                    
+                    $cont = $cont . '<b>Single Risk ' .strtoupper($data['predict_huruf']).'</b>';
+                    $cont .= '<br/>Weight : <b>'. $data['weight'].'</b>';
+
+                    $pred = '('. implode(";",$data['if_nilai']) .') = '.$data['predict'].' (min)';
+                    $cont .= ' Predic : <b>'. $pred .'</b>';
+
+                    $results['rules'][$kelurahan][$bencana] = $cont;
+                }
+                
+            }
+        }
+        
+        
+        #dd( $results['rules']);
+        if(!empty($results['defuzzy']))
+        {
+            foreach($results['defuzzy'] as $kelurahan => $val)
+            {
+                //Build Rumus
+                $pembilang = 0;
+                $penyebut = 0;
+                $pembilangTxt = '';
+                $penyebutTxt = '';
+                $rumus = '';
+                foreach($val as $bencana => $item )
+                {
+                    $pembilangTxt .= '('. $item['text'].') + ';
+                    $penyebutTxt .= $item['down'].' + ';
+                    $pembilang = $pembilang + $item['up'];
+                    $penyebut = $penyebut + $item['down'];
+                    
+                    /*foreach($item['text'] as $key => $txt)
+                    {
+                        $rumus .= '('. $txt.') + ';
+                    }
+
+                    $rumus = rtrim($rumus, "+ "). ' / ';
+
+                    foreach($item['down'] as $key => $txt)
+                    {
+                        $rumus .= $txt. ' + ';
+                        $penyebut = $penyebut + $txt;
+                    }
+                    $rumus = rtrim($rumus, " + ");
+
+                    //Build Total
+                    foreach($item['up'] as $key => $n)
+                    {
+                        $pembilang = $pembilang + $n;
+                    }
+
+                    $total = $penyebut > 0 ? ($pembilang / $penyebut) : 0;
+                    $results['defuzzy'][$kelurahan][$bencana] = [
+                        'rumus' => 'z= '. $rumus . ' = '. $total,
+                        'total' => $total,
+                        'output'=> $this->getFuzzyOutput($total)
+                    ];
+                    */
+                    
+                    /*
+                    #save
+                    $mkelurahan = $ci->db->select('id_kelurahan')->get_where('m_kelurahan', ['nama' => $kelurahan])->row();
+                    $mbencana = $ci->db->select('id')->get_where('m_bencana', ['nama' => $bencana])->row();
 
                     $head = ['tahun' => $year, 'id_kelurahan' => $mkelurahan->id_kelurahan];
                     $exist = $ci->db->select('id')->get_where('fuzzy_results', $head)->row();
@@ -264,24 +381,33 @@ class Fuzzy {
                         $id = $exist->id;
                     }
 
-                    $out = $results['defuzzy'][$kl][$bc]['z'];
-                    $status = $results['defuzzy'][$kl][$bc]['output'];
-
                     $existDet = $ci->db->select('fuzzy_id')->get_where('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id])->row();
                     if(!$existDet)
                     {
-                        $ci->db->insert('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id, 'out' => $out, 'status' => $status ]);
+                        $ci->db->insert('fuzzy_result_details', ['fuzzy_id' => $id, 'id_bencana' => $mbencana->id, 'out' => $total, 'status' => $this->getFuzzyOutput($total) ]);
                     }else{
                         $ci->db->where('fuzzy_id', $id);
                         $ci->db->where('id_bencana', $mbencana->id);
-                        $ci->db->update('fuzzy_result_details', ['out' => $out, 'status' => $status ]);
+                        $ci->db->update('fuzzy_result_details', ['out' => $total, 'status' => $this->getFuzzyOutput($total) ]);
                     }
+                    */
                 }
+
+                $total = $pembilang / $penyebut;
+                $pembilangTxt = rtrim($pembilangTxt, "+ ");
+                $penyebutTxt = rtrim($penyebutTxt, "+ ");
+                $rumus = $pembilangTxt . ' / '. $penyebutTxt .' = '. $total;
+
+                
+                $results['defuzzyfikasi'][$kelurahan] = [
+                    'rumus' => 'z=' . $rumus,
+                    'total' => $total
+                ];
+                
             }
-        };
-        
+        }
+
         return $results;
-        
     }
 
     public function getMemberShip($param)
