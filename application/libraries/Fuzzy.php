@@ -384,16 +384,15 @@ class Fuzzy {
 
     public function getFuzzyOutput($total)
     {
-        $o = 'Rendah';
-        if( $o > 1 )
-        {
-            $o = 'Rendah';
-        }else if( $o > 1.5 )
-        {
-            $o = 'Sedang';
-        }else if( $o > 2.5 )
+        if( $total >= 3 )
         {
             $o = 'Tinggi';
+        }else if( $total > 1 )
+        {
+            $o = 'Sedang';
+        }else
+        {
+            $o = 'Rendah';
         }
 
         return $o;

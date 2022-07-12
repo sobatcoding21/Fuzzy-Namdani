@@ -172,17 +172,17 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>1-1.5</td>
+                            <td>0-2</td>
                             <td>Rendah</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>1.5-2.5</td>
+                            <td>1-3</td>
                             <td>Sedang</td>
                         </tr>
                         <tr>
                             <td>3</td>
-                            <td>2.5-3</td>
+                            <td>> 3</td>
                             <td>Tinggi</td>
                         </tr>
                     </tbody>
